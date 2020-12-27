@@ -2,6 +2,7 @@ import { Grid, Paper, TextField, Button, Box } from "@material-ui/core";
 import Axios from "axios";
 import React, { useEffect } from "react";
 import { useState } from "react";
+import { Redirect } from "react-router-dom";
 
 import { RootContext } from '../contexts/RootContext';
 
@@ -22,8 +23,9 @@ function Login() {
         })
             .then(res => {
                 if (res.data.token) {
-                    localStorage.setItem('token', res.data.token);
+                    //localStorage.setItem('token', res.data.token);
                     rContext.setAuthenticated('true');
+                    rContext.setToken(res.data.token);
                 }
             })
             .catch(err => {
@@ -32,22 +34,14 @@ function Login() {
     }
 
     function logout() {
-        localStorage.removeItem('token');
+        //localStorage.removeItem('token');
+        rContext.setToken('')
         rContext.setAuthenticated('false');
     }
 
     function loggedInView() {
         return (
-            <Grid container spacing={0} alignItems="center" justify="center" direction="column">
-                <Grid item xs={6}>
-                    <Paper>
-                        <Box display="flex" alignItems="center" justifyContent="center" style={{ padding: "10px", width: "300px" }}>
-                            You are already logged in!
-                            <Button onClick={logout}>Logout</Button>
-                        </Box>
-                    </Paper>
-                </Grid>
-            </Grid>
+            <Redirect to="/" />
         )
     }
 

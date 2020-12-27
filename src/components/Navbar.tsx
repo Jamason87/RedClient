@@ -3,6 +3,7 @@ import React from "react";
 import MenuIcon from '@material-ui/icons/Menu';
 import { AccountCircle } from "@material-ui/icons";
 import { RootContext } from "./contexts/RootContext";
+import { Link as RouterLink } from "react-router-dom";
 
 function Navbar() {
     const rContext = React.useContext(RootContext);
@@ -33,6 +34,14 @@ function Navbar() {
         setAnchorEl(null);
     };
 
+    const handleLogout = () => {
+        rContext.setAuthenticated('false');
+        rContext.setAuthBody('');
+        rContext.setToken('');
+
+        setAnchorEl(null);
+    }
+
     return (
         <AppBar position="static" className={classes.root}>
             <Toolbar>
@@ -44,10 +53,19 @@ function Navbar() {
                 </Typography>
 
                 <Button color="inherit">Home</Button>
-                <Button color="inherit">Wishlist</Button>
-                <Button color="inherit">Collections</Button>
 
-                {rContext.authenticated && (
+                {rContext.authenticated == 'true' && (
+                    <React.Fragment>
+                        <Button component={RouterLink} to="/wishlist" color="inherit">Wishlist</Button>
+                        <Button color="inherit">Collections</Button>
+                    </React.Fragment>
+                )}
+
+                {rContext.authenticated !== 'true' && (
+                    <Button component={RouterLink} to="/login" color="inherit">Login</Button>
+                )}
+
+                {rContext.authenticated === 'true' && (
                     <div>
                         <IconButton
                             aria-label="account of current user"
@@ -75,6 +93,7 @@ function Navbar() {
                         >
                             <MenuItem onClick={handleClose}>Profile</MenuItem>
                             <MenuItem onClick={handleClose}>My account</MenuItem>
+                            <MenuItem onClick={handleLogout}>Logout</MenuItem>
                         </Menu>
                     </div>
                 )}

@@ -9,6 +9,7 @@ import UnprotectedTest from './components/pages/UnprotectedTest';
 import ProtectedTest from './components/pages/ProtectedTest';
 import AuthenticatedRoute from './components/auth/AuthenticatedRoute'
 import Navbar from './components/Navbar';
+import Wishlist from './components/pages/Wishlist';
 
 function App() {
 
@@ -22,6 +23,7 @@ function App() {
           <Route path="/unprot" component={UnprotectedTest} />
           <Route path="/test" render={() => <div>test route</div>} />
           <AuthenticatedRoute path="/prot" render={ProtectedTest} />
+          <AuthenticatedRoute path="/wishlist" render={Wishlist} />
         </Switch>
       </Router>
     </Container>
