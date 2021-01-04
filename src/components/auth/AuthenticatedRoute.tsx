@@ -1,19 +1,40 @@
-import React, { useContext } from 'react';
+import { Component } from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import { RootContext } from '../contexts/RootContext';
 
-//Acts as a wrapper for the react router Route component.
-export default ({ render, ...routeProps }: any) => {
-  const { authenticated } = useContext(RootContext);
+type AuthenticatedRouteProps = {
+  component: any
+  path: string
+}
 
-  //Checks if the user is authenticated and shows the correct page, otherwise redirects to the login page.
-  return (
-    <Route
-      {...routeProps}
-      render={() => (authenticated === 'true' ? 
-        render() : 
-        <Redirect to='/login' />)
-      }
-    />
-  );
-};
+type AuthenticatedRouteState = {
+
+}
+
+export default class AuthenticatedRoute extends Component<AuthenticatedRouteProps,AuthenticatedRouteState> {
+
+  static contextType = RootContext;
+
+  constructor(props: any) {
+    super(props)
+  }
+
+  // render() {
+  //   return (
+  //     <Route
+  //       {...this.props}
+  //       component={() => (this.context.authenticated === 'true' ? 
+  //         this.props.component() : 
+  //         <Redirect to='/login' />)
+  //       }
+  //     />
+  //   )
+  // }
+
+  render() {
+      return (
+        this.context.authenticated ? <Route
+              {...this.props} /> : <Redirect to='/login' />
+      )
+  }
+}

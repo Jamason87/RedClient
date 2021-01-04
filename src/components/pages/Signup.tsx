@@ -1,39 +1,57 @@
 import { Grid, Paper, TextField, Button, Box } from "@material-ui/core";
 import Axios from "axios";
-import React from "react";
-import { useState } from "react";
+import React, { Component } from "react";
 import { RootContext } from "../contexts/RootContext";
 
-function Signup() {
-    const [iUsername, setIUsername] = useState('');
-    const [iEmail, setIEmail] = useState('');
-    const [iPassword, setIPassword] = useState('');
+type SignupProps = {
+    component: React.Component
+}
 
-    const [registered, setRegistered] = useState(false)
-    const [loggedIn, setLoggedIn] = useState(false)
+type SignupState = {
+    iUsername: string,
+    iEmail: string,
+    iPassword: string,
+    registered: boolean
+}
 
-    const rContext = React.useContext(RootContext);
+export default class Signup extends Component<SignupProps, SignupState> {
 
-    //Connects to server to register a new user
-    function submit(e: any) {
+    static contextType = RootContext;
+
+    constructor(props: any) {
+        super(props);
+
+        this.state = {
+            iUsername: '',
+            iPassword: '',
+            iEmail: '',
+            registered: false
+        }
+
+        this.submit = this.submit.bind(this);
+    }    
+
+    submit(e: any) {
         e.preventDefault();
 
         Axios.post('http://localhost:4002/user/register', {
-            email: iEmail,
-            username: iUsername,
-            password: iPassword
+            email: this.state.iEmail,
+            username: this.state.iUsername,
+            password: this.state.iPassword
         })
             .then(res => {
-                //success
-                setRegistered(true);
-
+                this.setState({
+                    registered: true
+                })
             })
             .catch(err => {
                 //issue
             })
     }
 
-    function loggedInView() {
+    loggedInView() {
+        console.log(this.context.serverUrl)
+
         return (
             <Grid container spacing={0} alignItems="center" justify="center" direction="column">
                 <Grid item xs={6}>
@@ -47,7 +65,7 @@ function Signup() {
         )
     }
 
-    function registeredView() {
+    registeredView() {
         return (
             <Grid container spacing={0} alignItems="center" justify="center" direction="column">
                 <Grid item xs={6}>
@@ -61,7 +79,7 @@ function Signup() {
         )
     }
 
-    function defaultView() {
+    defaultView() {
         return (
             <Grid container spacing={0} alignItems="center" justify="center" direction="column">
                 <Grid item xs={6}>
@@ -76,26 +94,32 @@ function Signup() {
                                         <TextField id="standard-basic" label="Email" onChange={
                                                 (e) => {
                                                     e.preventDefault();
-                                                    setIEmail(e.target.value);
+                                                    this.setState({
+                                                        iEmail: e.target.value
+                                                    })
                                                 }
                                             }  />
                                         <br /><br />
                                         <TextField id="standard-basic" label="Username" onChange={
                                                 (e) => {
                                                     e.preventDefault();
-                                                    setIUsername(e.target.value);
+                                                    this.setState({
+                                                        iUsername: e.target.value
+                                                    })
                                                 }
                                             }  />
                                         <br /><br />
                                         <TextField id="standard-basic" label="Password" onChange={
                                                 (e) => {
                                                     e.preventDefault();
-                                                    setIPassword(e.target.value);
+                                                    this.setState({
+                                                        iPassword: e.target.value
+                                                    })
                                                 }
                                             }  />
                                     </Grid>
                                     <Grid item style={{textAlign: "center", padding: "30px"}}>
-                                        <Button variant="contained" color="primary" onClick={submit}>Submit</Button>
+                                        <Button variant="contained" color="primary" onClick={this.submit}>Submit</Button>
                                     </Grid>
                                 </Grid>
                             </form>
@@ -106,11 +130,9 @@ function Signup() {
         )
     }
 
-    return (
-        <React.Fragment>
-            {rContext.authenticated ==='true' ? loggedInView() : registered ? registeredView() : defaultView()}
-        </React.Fragment>
-    );
+    render() {
+        return (
+            this.context.authenticated === 'true' ? this.loggedInView() : (this.state.registered ? this.registeredView() : this.defaultView())
+        )
+    }
 }
-
-export default Signup;

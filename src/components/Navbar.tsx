@@ -57,7 +57,7 @@ function Navbar() {
                 {rContext.authenticated == 'true' && (
                     <React.Fragment>
                         <Button component={RouterLink} to="/wishlist" color="inherit">Wishlist</Button>
-                        <Button color="inherit">Collections</Button>
+                        <Button component={RouterLink} to="/collections" color="inherit">Collections</Button>
                     </React.Fragment>
                 )}
 

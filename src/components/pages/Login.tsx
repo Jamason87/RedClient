@@ -1,31 +1,48 @@
 import { Grid, Paper, TextField, Button, Box } from "@material-ui/core";
 import Axios from "axios";
-import React, { useEffect } from "react";
-import { useState } from "react";
+import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
 
 import { RootContext } from '../contexts/RootContext';
 
-function Login() {
-    const [iUsername, setIUsername] = useState('');
-    const [iPassword, setIPassword] = useState('');
 
-    const rContext = React.useContext(RootContext);
+type LoginState = {
+    iUsername: string,
+    iPassword: string
+}
 
-    //Connects to server to login a new user
-    function submit(e: any) {
+type LoginProps = {
+    component: any
+}
+
+export default class Login extends Component<LoginProps, LoginState> {
+
+    static contextType = RootContext;
+
+    constructor(props: any) {
+        super(props);
+
+        this.state = {
+            iUsername: '',
+            iPassword: ''
+        }
+
+        this.submit = this.submit.bind(this);
+    }
+
+    submit(e: any) {
         e.preventDefault();
 
         //Handle login token here
         Axios.post('http://localhost:4002/user/login', {
-            username: iUsername,
-            password: iPassword
+            username: this.state.iUsername,
+            password: this.state.iPassword
         })
             .then(res => {
                 if (res.data.token) {
                     //localStorage.setItem('token', res.data.token);
-                    rContext.setAuthenticated('true');
-                    rContext.setToken(res.data.token);
+                    this.context.setAuthenticated('true');
+                    this.context.setToken(res.data.token);
                 }
             })
             .catch(err => {
@@ -33,20 +50,24 @@ function Login() {
             })
     }
 
-    function logout() {
-        //localStorage.removeItem('token');
-        rContext.setToken('')
-        rContext.setAuthenticated('false');
+    logout() {
+        this.context.setToken('')
+        this.context.setAuthenticated('false');
     }
 
-    function loggedInView() {
+    loggedInView() {
         return (
             <Redirect to="/" />
         )
     }
 
-    return (
-        rContext.authenticated === 'true' ? loggedInView() :
+    componentDidMount() {
+        console.log(this.context.authenticated)
+    }
+
+    render() {
+        return (
+            this.context.authenticated === 'true' ? this.loggedInView() :
             <Grid container spacing={0} alignItems="center" justify="center" direction="column">
                 <Grid item xs={6}>
                     <Paper>
@@ -60,19 +81,25 @@ function Login() {
                                         <TextField id="standard-basic" label="Username" onChange={
                                             (e) => {
                                                 e.preventDefault();
-                                                setIUsername(e.target.value);
+                                                
+                                                this.setState({
+                                                    iUsername: e.target.value
+                                                })
                                             }
                                         } />
                                         <br /><br />
                                         <TextField id="standard-basic" label="Password" onChange={
                                             (e) => {
                                                 e.preventDefault();
-                                                setIPassword(e.target.value);
+
+                                                this.setState({
+                                                    iPassword: e.target.value
+                                                })
                                             }
                                         } />
                                     </Grid>
                                     <Grid item style={{ textAlign: "center", padding: "30px" }}>
-                                        <Button onClick={submit} variant="contained" color="primary">Submit</Button>
+                                        <Button onClick={this.submit} variant="contained" color="primary">Submit</Button>
                                     </Grid>
                                 </Grid>
                             </form>
@@ -80,7 +107,6 @@ function Login() {
                     </Paper>
                 </Grid>
             </Grid>
-    )
+        )
+    }
 }
-
-export default Login;
