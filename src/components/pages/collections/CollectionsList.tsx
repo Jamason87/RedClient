@@ -1,51 +1,72 @@
 import Axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import React, { Component } from "react";
 import { RootContext } from '../../contexts/RootContext';
 import CollectionListItem from "./CollectionListItem";
 
-function CollectionList() {
-    const rContext = useContext(RootContext)
+type CollectionsListProps = {
 
-    const [page, setPage] = useState(1);
-    const [maxResults, setMaxResults] = useState(10);
-    const [totalResults, setTotalResults] = useState(0)
-    const [results, setResults] = useState([]);
+}
 
-    useEffect(() => {
-        console.log(rContext.serverUrl)
+type CollectionsListState = {
+    page: number,
+    maxResults: number,
+    totalResults: number,
+    results: Array<any>
+}
 
+export default class CollectionsList extends Component<CollectionsListProps, CollectionsListState> {
+    static contextType = RootContext;
+
+    constructor(props: any) {
+        super(props);
+
+        this.state = {
+            page: 1,
+            maxResults: 10,
+            totalResults: 0,
+            results: []
+        }
+    }
+
+    loadData() {
         let axiosData = {
-            page: page,
-            maxResults: maxResults
+            page: this.state.page,
+            maxResults: this.state.maxResults
         }
 
-        Axios.post(`${rContext.serverUrl}/collection/user`, axiosData, {
+        Axios.post(`${this.context.serverUrl}/collection/user`, axiosData, {
             headers: {
-                'Authorization': rContext.token
+                'Authorization': this.context.token
             }
         })
             .then(res => {
-                setTotalResults(res.data.data.count);
-                setResults(res.data.data.rows);
+                this.setState({
+                    totalResults: res.data.data.count,
+                    results: res.data.data.rows
+                })
             })
             .catch(err => {
                 console.log(err.response)
             })
-    }, [page, maxResults]);
+    }
 
-    useEffect(() => {
-        console.log(results)
-    }, [results])
+    componentDidMount() {
+        this.loadData();
+    }
 
-    return (
-        <React.Fragment>
-            {
-                results.map((result: any) => {
-                    return <CollectionListItem id={result.id} name={result.name} description={result.description} />
-                })
-            }
-        </React.Fragment>
-    )
+    componentDidUpdate() {
+        this.loadData();
+    }
+
+    render() {
+        return (
+            <React.Fragment>
+                {
+                    this.state.results.map((result: any) => {
+                        return <CollectionListItem id={result.id} name={result.name} description={result.description} />
+                    })
+                }
+            </React.Fragment>
+        )
+    }
 }
-
-export default CollectionList;

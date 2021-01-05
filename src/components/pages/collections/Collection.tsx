@@ -1,23 +1,41 @@
 import Axios from 'axios'
-import React, { useContext, useEffect, useState } from 'react'
+import { Component } from 'react'
 import { useParams } from 'react-router-dom'
 import { RootContext } from '../../contexts/RootContext';
 
-export default function Collection() {
-    const { collectionId } = useParams<{collectionId: string}>()
-    const rContext = useContext(RootContext);
-    const [result, setResult] = useState();
+type CollectionProps = {
 
-    useEffect(() => {
-        Axios.get(`${rContext.serverUrl}/collection/id/${collectionId}`)
+}
+
+type CollectionState = {
+    result: any
+    collectionId: any
+}
+
+export default class Collection extends Component<CollectionProps, CollectionState> {
+    static contextType = RootContext;
+
+    constructor(props: any) {
+        super(props)
+
+        this.state = {
+            collectionId: useParams<{collectionId: string}>(),
+            result: null
+        }
+    }
+
+    componentDidMount() {
+        Axios.get(`${this.context.serverUrl}/collection/id/${this.state.collectionId}`)
             .then(res => {
                 console.log(res.data.data)
             })
-    }, [])
+    }
 
-    return (
-        <div>
-            This is a collection page.
-        </div>
-    )
+    render() {
+        return (
+            <div>
+                This is a collection page.
+            </div>
+        )
+    }
 }

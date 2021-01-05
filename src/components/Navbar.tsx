@@ -1,16 +1,57 @@
 import { AppBar, Tabs, Tab, Button, IconButton, Toolbar, Typography, createStyles, makeStyles, Theme, MenuItem, Menu } from "@material-ui/core";
-import React from "react";
+import React, { Component } from "react";
 import MenuIcon from '@material-ui/icons/Menu';
 import { AccountCircle } from "@material-ui/icons";
 import { RootContext } from "./contexts/RootContext";
 import { Link as RouterLink } from "react-router-dom";
 
-function Navbar() {
-    const rContext = React.useContext(RootContext);
-    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-    const open = Boolean(anchorEl);
+type NavbarProps = {
 
-    const useStyles = makeStyles((theme: Theme) =>
+}
+
+type NavbarState = {
+    classes: any,
+    anchorEl: any,
+    open: boolean
+}
+
+export default class Navbar extends Component<NavbarProps, NavbarState> {
+    static contextType = RootContext;
+
+    constructor(props: any) {
+        super(props);
+
+        this.state = {
+            classes: this.useStyles(),
+            anchorEl: '',
+            open: Boolean(this.state.anchorEl)
+        }
+    }
+
+    handleMenu(event: React.MouseEvent<HTMLElement>) {
+        this.setState({
+            anchorEl: event.currentTarget
+        })
+    };
+
+    handleClose() {
+        this.setState({
+            anchorEl: null
+        })
+    };
+
+    handleLogout() {
+        this.context.setAuthenticated('false');
+        this.context.setAuthBody('');
+        this.context.setToken('');
+
+        this.setState({
+            anchorEl: null
+        })
+    }
+
+    useStyles() {
+        return makeStyles((theme: Theme) =>
         createStyles({
             root: {
                 flexGrow: 1,
@@ -23,83 +64,66 @@ function Navbar() {
             },
         }),
     );
-
-    const classes = useStyles();
-
-    const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-
-    const handleLogout = () => {
-        rContext.setAuthenticated('false');
-        rContext.setAuthBody('');
-        rContext.setToken('');
-
-        setAnchorEl(null);
     }
 
-    return (
-        <AppBar position="static" className={classes.root}>
-            <Toolbar>
-                <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-                    <MenuIcon />
-                </IconButton>
-                <Typography variant="h6" className={classes.title}>
-                    Funko Folder
-                </Typography>
-
-                <Button color="inherit">Home</Button>
-
-                {rContext.authenticated == 'true' && (
-                    <React.Fragment>
-                        <Button component={RouterLink} to="/wishlist" color="inherit">Wishlist</Button>
-                        <Button component={RouterLink} to="/collections" color="inherit">Collections</Button>
-                    </React.Fragment>
-                )}
-
-                {rContext.authenticated !== 'true' && (
-                    <Button component={RouterLink} to="/login" color="inherit">Login</Button>
-                )}
-
-                {rContext.authenticated === 'true' && (
-                    <div>
-                        <IconButton
-                            aria-label="account of current user"
-                            aria-controls="menu-appbar"
-                            aria-haspopup="true"
-                            onClick={handleMenu}
-                            color="inherit"
-                        >
-                            <AccountCircle />
-                        </IconButton>
-                        <Menu
-                            id="menu-appbar"
-                            anchorEl={anchorEl}
-                            anchorOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            open={open}
-                            onClose={handleClose}
-                        >
-                            <MenuItem onClick={handleClose}>Profile</MenuItem>
-                            <MenuItem onClick={handleClose}>My account</MenuItem>
-                            <MenuItem onClick={handleLogout}>Logout</MenuItem>
-                        </Menu>
-                    </div>
-                )}
-            </Toolbar>
-        </AppBar>
-    );
+    render() {
+        return (
+            <AppBar position="static" className={this.state.classes.root}>
+                <Toolbar>
+                    <IconButton edge="start" className={this.state.classes.menuButton} color="inherit" aria-label="menu">
+                        <MenuIcon />
+                    </IconButton>
+                    <Typography variant="h6" className={this.state.classes.title}>
+                        Funko Folder
+                    </Typography>
+    
+                    <Button color="inherit">Home</Button>
+    
+                    {this.context.authenticated == 'true' && (
+                        <React.Fragment>
+                            <Button component={RouterLink} to="/wishlist" color="inherit">Wishlist</Button>
+                            <Button component={RouterLink} to="/collections" color="inherit">Collections</Button>
+                        </React.Fragment>
+                    )}
+    
+                    {this.context.authenticated !== 'true' && (
+                        <Button component={RouterLink} to="/login" color="inherit">Login</Button>
+                    )}
+    
+                    {this.context.authenticated === 'true' && (
+                        <div>
+                            <IconButton
+                                aria-label="account of current user"
+                                aria-controls="menu-appbar"
+                                aria-haspopup="true"
+                                onClick={this.handleMenu}
+                                color="inherit"
+                            >
+                                <AccountCircle />
+                            </IconButton>
+                            <Menu
+                                id="menu-appbar"
+                                anchorEl={this.state.anchorEl}
+                                anchorOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                                keepMounted
+                                transformOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                                open={this.state.open}
+                                onClose={this.handleClose}
+                            >
+                                <MenuItem onClick={this.handleClose}>Profile</MenuItem>
+                                <MenuItem onClick={this.handleClose}>My account</MenuItem>
+                                <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
+                            </Menu>
+                        </div>
+                    )}
+                </Toolbar>
+            </AppBar>
+        )
+    }
 }
-
-export default Navbar;
