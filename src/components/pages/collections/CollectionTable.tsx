@@ -41,7 +41,7 @@ export default class CollectionTable extends Component<CollectionTableProps, Col
                         <TableBody>
                             {
                                 this.props.funkos.map((id: number) => {
-                                    return <CollectionTableItem funkoId={id} />
+                                    return <CollectionTableItem key={id} funkoId={id} />
                                 })
                             }
                         </TableBody>

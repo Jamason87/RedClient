@@ -1,17 +1,20 @@
+import classes from "*.module.css";
+import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Button, Grid, Modal } from "@material-ui/core";
 import Axios from "axios";
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import { RootContext } from '../../contexts/RootContext';
-import CollectionListItem from "./CollectionListItem";
+import CollectionsAdd from "./CollectionsAdd";
 
 type CollectionsListProps = {
-
+    page: number,
+    maxResults: number
 }
 
 type CollectionsListState = {
-    page: number,
-    maxResults: number,
     totalResults: number,
-    results: Array<any>
+    results: Array<any>,
+    addModalOpen: boolean
 }
 
 export default class CollectionsList extends Component<CollectionsListProps, CollectionsListState> {
@@ -21,17 +24,19 @@ export default class CollectionsList extends Component<CollectionsListProps, Col
         super(props);
 
         this.state = {
-            page: 1,
-            maxResults: 10,
             totalResults: 0,
-            results: []
+            results: [],
+            addModalOpen: false
         }
+
+        this.handleAddModalOpen = this.handleAddModalOpen.bind(this);
+        this.handleAddModalClosed = this.handleAddModalClosed.bind(this);
     }
 
     loadData() {
         let axiosData = {
-            page: this.state.page,
-            maxResults: this.state.maxResults
+            page: this.props.page,
+            maxResults: this.props.maxResults
         }
 
         Axios.post(`${this.context.serverUrl}/collection/user`, axiosData, {
@@ -44,6 +49,8 @@ export default class CollectionsList extends Component<CollectionsListProps, Col
                     totalResults: res.data.data.count,
                     results: res.data.data.rows
                 })
+
+                console.log(res.data.data.rows)
             })
             .catch(err => {
                 console.log(err.response)
@@ -54,18 +61,66 @@ export default class CollectionsList extends Component<CollectionsListProps, Col
         this.loadData();
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps: any) {
+        if (prevProps.page !== this.props.page) {
+            this.loadData();
+        }
+    }
+
+    handleAddModalOpen() {
+        this.setState({
+            addModalOpen: true
+        })
+    }
+
+    handleAddModalClosed() {
+        this.setState({
+            addModalOpen: false
+        })
+
         this.loadData();
     }
 
     render() {
         return (
             <React.Fragment>
-                {
-                    this.state.results.map((result: any) => {
-                        return <CollectionListItem id={result.id} name={result.name} description={result.description} />
-                    })
-                }
+                <Grid container justify="flex-end">
+                    <Button variant="contained" color="primary" onClick={this.handleAddModalOpen}>Add</Button>
+                </Grid>
+                <TableContainer component={Paper}>
+                <Table aria-label="simple table">
+                    <TableHead>
+                    <TableRow>
+                        <TableCell>Collection Name</TableCell>
+                        <TableCell align="left">Description</TableCell>
+                        <TableCell align="right"># of Items</TableCell>
+                    </TableRow>
+                    </TableHead>
+                    <TableBody>
+                    {this.state.results.map((result: any) => (
+                        <TableRow key={result.id}>
+                        <TableCell component="th" scope="row">
+                            <Link to={`/collection/${result.id}`}>{result.name}</Link>
+                        </TableCell>
+                        <TableCell align="left">{result.description}</TableCell>
+                        <TableCell align="right">{0}</TableCell>
+                        </TableRow>
+                    ))}
+                    </TableBody>
+                </Table>
+                </TableContainer>
+
+
+
+                <Modal
+                    open={this.state.addModalOpen}
+                    onClose={this.handleAddModalClosed}
+                    aria-labelledby="simple-modal-title"
+                    aria-describedby="simple-modal-description"
+                    style={{display:'flex',alignItems:'center',justifyContent:'center', outline: 0}}
+                >
+                    <CollectionsAdd closeModal={this.handleAddModalClosed} />
+                </Modal>
             </React.Fragment>
         )
     }

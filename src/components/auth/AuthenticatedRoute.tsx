@@ -15,25 +15,9 @@ export default class AuthenticatedRoute extends Component<AuthenticatedRouteProp
 
   static contextType = RootContext;
 
-  constructor(props: any) {
-    super(props)
-  }
-
-  // render() {
-  //   return (
-  //     <Route
-  //       {...this.props}
-  //       component={() => (this.context.authenticated === 'true' ? 
-  //         this.props.component() : 
-  //         <Redirect to='/login' />)
-  //       }
-  //     />
-  //   )
-  // }
-
   render() {
       return (
-        this.context.authenticated ? <Route
+        this.context.authenticated === 'true' ? <Route
               {...this.props} /> : <Redirect to='/login' />
       )
   }

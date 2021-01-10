@@ -8,8 +8,11 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import AuthenticatedRoute from './components/auth/AuthenticatedRoute'
 import Navbar from './components/Navbar';
 import Wishlist from './components/pages/collections/Wishlist';
-import CollectionList from './components/pages/collections/CollectionsList';
 import Collection from './components/pages/collections/Collection';
+import Collections from './components/pages/collections/Collections';
+import Home from './components/pages/Home';
+import Search from './components/pages/search/Search';
+import Funko from './components/pages/funko/Funko';
 
 export default class App extends Component {
   render() {
@@ -17,14 +20,19 @@ export default class App extends Component {
       <Container>
         <Router>
           <Navbar />
-          <Switch>
-            <Route path="/login" component={Login} />
-            <Route path="/signup" component={Signup} />
-            <Route path="/test" render={() => <div>test route</div>} />
-            <AuthenticatedRoute path="/wishlist" component={Wishlist} />
-            <AuthenticatedRoute path="/collections" component={CollectionList} />
-            <AuthenticatedRoute path="/collection/:collectionId" component={Collection} />
-          </Switch>
+          <div style={{padding: "10px", paddingTop: "30px"}}>
+            <Switch>
+              <Route path="/login" component={Login} />
+              <Route path="/signup" component={Signup} />
+              <Route path="/test" render={() => <div>test route</div>} />
+              <Route path="/funko/:funkoId" component={Funko} />
+              <Route exact path="/" component={Home} />
+              <Route exact path="/search" component={Search} />
+              <AuthenticatedRoute path="/wishlist" component={Wishlist} />
+              <AuthenticatedRoute path="/collections" component={Collections} />
+              <AuthenticatedRoute path="/collection/:collectionId" component={Collection} />
+            </Switch>
+          </div>
         </Router>
       </Container>
     )

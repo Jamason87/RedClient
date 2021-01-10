@@ -1,4 +1,4 @@
-import { AppBar, Tabs, Tab, Button, IconButton, Toolbar, Typography, createStyles, makeStyles, Theme, MenuItem, Menu } from "@material-ui/core";
+import { AppBar, Button, IconButton, Toolbar, Typography, createStyles, makeStyles, Theme, MenuItem, Menu } from "@material-ui/core";
 import React, { Component } from "react";
 import MenuIcon from '@material-ui/icons/Menu';
 import { AccountCircle } from "@material-ui/icons";
@@ -23,9 +23,17 @@ export default class Navbar extends Component<NavbarProps, NavbarState> {
 
         this.state = {
             classes: this.useStyles(),
-            anchorEl: '',
-            open: Boolean(this.state.anchorEl)
+            anchorEl: null,
+            open: Boolean(false)
         }
+
+        this.setState({
+            open: Boolean(this.state.anchorEl)
+        })
+
+        this.handleClose = this.handleClose.bind(this);
+        this.handleMenu = this.handleMenu.bind(this);
+        this.handleLogout = this.handleLogout.bind(this);
     }
 
     handleMenu(event: React.MouseEvent<HTMLElement>) {
@@ -77,9 +85,9 @@ export default class Navbar extends Component<NavbarProps, NavbarState> {
                         Funko Folder
                     </Typography>
     
-                    <Button color="inherit">Home</Button>
+                    <Button component={RouterLink} to="/" color="inherit">Home</Button>
     
-                    {this.context.authenticated == 'true' && (
+                    {this.context.authenticated === 'true' && (
                         <React.Fragment>
                             <Button component={RouterLink} to="/wishlist" color="inherit">Wishlist</Button>
                             <Button component={RouterLink} to="/collections" color="inherit">Collections</Button>
@@ -113,7 +121,7 @@ export default class Navbar extends Component<NavbarProps, NavbarState> {
                                     vertical: 'top',
                                     horizontal: 'right',
                                 }}
-                                open={this.state.open}
+                                open={Boolean(this.state.anchorEl)}
                                 onClose={this.handleClose}
                             >
                                 <MenuItem onClick={this.handleClose}>Profile</MenuItem>

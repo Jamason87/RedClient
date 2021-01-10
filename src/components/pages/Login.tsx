@@ -70,7 +70,7 @@ export default class Login extends Component<LoginProps, LoginState> {
             this.context.authenticated === 'true' ? this.loggedInView() :
             <Grid container spacing={0} alignItems="center" justify="center" direction="column">
                 <Grid item xs={6}>
-                    <Paper>
+                    <Paper elevation={3}>
                         <Box display="flex" alignItems="center" justifyContent="center" style={{ padding: "10px", width: "300px" }}>
                             <form noValidate autoComplete="off">
                                 <Grid container direction="column">

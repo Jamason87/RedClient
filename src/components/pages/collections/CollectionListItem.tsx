@@ -11,9 +11,6 @@ type CollectionListItemState = {
 }
 
 export default class CollectionListItem extends Component<CollectionListItemProps, CollectionListItemState> {
-    constructor(props: any) {
-        super(props);
-    }
 
     render() {
         return (

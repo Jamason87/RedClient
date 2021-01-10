@@ -40,7 +40,7 @@ export default class CollectionTableItem extends Component<CollectionTableItemPr
                 {
                     this.state.name && (
                     <TableRow>
-                        <TableCell>{name} - <img src={this.state.imageUrl} /></TableCell>
+                        <TableCell>{this.state.name} - <img alt="" src={this.state.imageUrl} /></TableCell>
                     </TableRow>)
                 }
             </React.Fragment>
