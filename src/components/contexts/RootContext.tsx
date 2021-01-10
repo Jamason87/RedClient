@@ -31,7 +31,7 @@ export default class RootContextClass extends Component<RootContextProps, RootCo
       authenticated: '',
       authBody: '',
       token: '',
-      serverUrl: 'http://localhost:4002'
+      serverUrl: ''
     }
 
     this.defaultContext = this.defaultContext.bind(this);
@@ -41,8 +41,7 @@ export default class RootContextClass extends Component<RootContextProps, RootCo
     this.setState({
       authenticated: localStorage.getItem('authenticated') || '',
       authBody: localStorage.getItem('authBody') || '',
-      token: localStorage.getItem('token') || '',
-      serverUrl: 'http://localhost:4002'
+      token: localStorage.getItem('token') || ''
     })
 
     switch(window.location.hostname) {
