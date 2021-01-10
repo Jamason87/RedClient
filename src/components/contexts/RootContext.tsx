@@ -34,6 +34,17 @@ export default class RootContextClass extends Component<RootContextProps, RootCo
       serverUrl: 'http://localhost:4002'
     }
 
+    this.defaultContext = this.defaultContext.bind(this);
+  }
+
+  componentDidMount() {
+    this.setState({
+      authenticated: localStorage.getItem('authenticated') || '',
+      authBody: localStorage.getItem('authBody') || '',
+      token: localStorage.getItem('token') || '',
+      serverUrl: 'http://localhost:4002'
+    })
+
     switch(window.location.hostname) {
       case 'localhost' || '127.0.0.1':
         this.setState({
@@ -45,17 +56,6 @@ export default class RootContextClass extends Component<RootContextProps, RootCo
           serverUrl: 'https://jam-funkofolder-server.herokuapp.com'
         })
     }
-
-    this.defaultContext = this.defaultContext.bind(this);
-  }
-
-  componentDidMount() {
-    this.setState({
-      authenticated: localStorage.getItem('authenticated') || '',
-      authBody: localStorage.getItem('authBody') || '',
-      token: localStorage.getItem('token') || '',
-      serverUrl: 'http://localhost:4002'
-    })
   }
 
   componentDidUpdate() {
