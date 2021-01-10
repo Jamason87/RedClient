@@ -34,6 +34,18 @@ export default class RootContextClass extends Component<RootContextProps, RootCo
       serverUrl: 'http://localhost:4002'
     }
 
+    switch(window.location.hostname) {
+      case 'localhost' || '127.0.0.1':
+        this.setState({
+          serverUrl: 'http://localhost:4002'
+        })
+        break;
+      case 'jam-funkofolder-client.herokuapp.com':
+        this.setState({
+          serverUrl: 'https://jam-funkofolder-server.herokuapp.com'
+        })
+    }
+
     this.defaultContext = this.defaultContext.bind(this);
   }
 
