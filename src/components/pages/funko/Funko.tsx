@@ -74,10 +74,16 @@ export default class Funko extends Component<FunkoProps, FunkoState> {
         })
     }
 
-    handleAddToCollectionModalClosed() {
+    handleAddToCollectionModalClosed(success: boolean) {
         this.setState({
             addToCollectionModalOpen: false
         })
+
+        if (success) {
+            this.setState({
+                successMsg: 'This funko item has been added to your collection!'
+            })
+        }
     }
 
     render() {
@@ -116,12 +122,12 @@ export default class Funko extends Component<FunkoProps, FunkoState> {
                 
                 <Modal
                     open={this.state.addToCollectionModalOpen}
-                    onClose={this.handleAddToCollectionModalClosed}
+                    onClose={() => this.handleAddToCollectionModalClosed(false)}
                     aria-labelledby="simple-modal-title"
                     aria-describedby="simple-modal-description"
                     style={{display:'flex',alignItems:'center',justifyContent:'center', outline: 0}}
                 >
-                    <FunkoAddToCollection closeModal={this.handleAddToCollectionModalClosed} />
+                    <FunkoAddToCollection funkoId={this.state.funkoId} closeModal={this.handleAddToCollectionModalClosed} />
                 </Modal>
             </React.Fragment>
         )

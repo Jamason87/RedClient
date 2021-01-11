@@ -1,4 +1,5 @@
 // RootContext.js
+import Axios from 'axios';
 import React, { Component } from 'react';
 
 type ContextTypes = {
@@ -31,30 +32,25 @@ export default class RootContextClass extends Component<RootContextProps, RootCo
       authenticated: '',
       authBody: '',
       token: '',
-      serverUrl: ''
+      serverUrl: (window.location.hostname === ('localhost' || '127.0.0.1')) ? 'http://localhost:4002' : 'https://jam-funkofolder-server.herokuapp.com'
     }
 
     this.defaultContext = this.defaultContext.bind(this);
   }
 
   componentDidMount() {
-    this.setState({
-      authenticated: localStorage.getItem('authenticated') || '',
-      authBody: localStorage.getItem('authBody') || '',
-      token: localStorage.getItem('token') || ''
+    Axios.get(`${this.state.serverUrl}/user/auth`, {
+      headers: {
+        "Authorization": localStorage.getItem('token') || ''
+      }
     })
-
-    switch(window.location.hostname) {
-      case 'localhost' || '127.0.0.1':
+      .then(res => {
         this.setState({
-          serverUrl: 'http://localhost:4002'
+          authenticated: (res.status === 200) ? localStorage.getItem('authenticated') || '' : '',
+          authBody: (res.status === 200) ? localStorage.getItem('authBody') || '' : '',
+          token: (res.status === 200) ? localStorage.getItem('token') || '' : ''
         })
-        break;
-      case 'jam-funkofolder-client.herokuapp.com':
-        this.setState({
-          serverUrl: 'https://jam-funkofolder-server.herokuapp.com'
-        })
-    }
+      })
   }
 
   componentDidUpdate() {
