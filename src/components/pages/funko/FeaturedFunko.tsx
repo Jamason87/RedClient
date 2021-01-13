@@ -16,7 +16,7 @@ export default class FeaturedFunko extends Component<FeaturedFunkoProps, Feature
         super(props);
 
         this.state = {
-            funkos: [5519, 3263, 3814, 5985, 3840, 6309],
+            funkos: [36, 209, 1857, 1747, 332, 136],
             result: null
         }
     }
