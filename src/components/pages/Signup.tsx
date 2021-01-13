@@ -59,7 +59,7 @@ export default class Signup extends Component<SignupProps, SignupState> {
         }
 
         if (errors.length === 0) {
-            Axios.post('http://localhost:4002/user/register', {
+            Axios.post(`${this.context.serverUrl}/user/register`, {
                 email: this.state.iEmail,
                 username: this.state.iUsername,
                 password: this.state.iPassword

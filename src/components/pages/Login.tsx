@@ -49,7 +49,7 @@ export default class Login extends Component<LoginProps, LoginState> {
         }
 
         //Handle login token here
-        Axios.post('http://localhost:4002/user/login', {
+        Axios.post(`${this.context.serverUrl}/user/login`, {
             username: this.state.iUsername,
             password: this.state.iPassword
         })
