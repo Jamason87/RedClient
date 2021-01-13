@@ -13,6 +13,8 @@ import Collections from './components/pages/collections/Collections';
 import Home from './components/pages/Home';
 import Search from './components/pages/search/Search';
 import Funko from './components/pages/funko/Funko';
+import Footer from './components/Footer';
+import Admin from './components/admin/Admin';
 
 export default class App extends Component {
   render() {
@@ -31,8 +33,10 @@ export default class App extends Component {
               <AuthenticatedRoute path="/wishlist" component={Wishlist} />
               <AuthenticatedRoute path="/collections" component={Collections} />
               <AuthenticatedRoute path="/collection/:collectionId" component={Collection} />
+              <AuthenticatedRoute path="/admin" component={Admin} />
             </Switch>
           </div>
+          <Footer />
         </Router>
       </Container>
     )

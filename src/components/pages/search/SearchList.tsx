@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import {RootContext} from '../../contexts/RootContext'
 import {Pagination} from '@material-ui/lab'
 import { Link } from 'react-router-dom';
+import { Grid } from '@material-ui/core';
 
 type resultObj = {
     title: string
@@ -69,13 +70,15 @@ export default class SearchList extends Component<SearchListProps, SearchListSta
                     return <li><Link to={`/funko/${result.id}`}>{result.title}</Link></li>
                 })}
 
-                <Pagination count={
-                        Math.ceil(this.state.rCount/this.state.maxResults)
-                    } defaultPage={1} siblingCount={1} boundaryCount={1} page={this.state.page} onChange={(e,v) => {
-                        this.setState({
-                            page: v
-                        })
-                    }} />
+                <Grid container justify="space-around">
+                    <Pagination count={
+                            Math.ceil(this.state.rCount/this.state.maxResults)
+                        } defaultPage={1} siblingCount={1} boundaryCount={1} page={this.state.page} onChange={(e,v) => {
+                            this.setState({
+                                page: v
+                            })
+                        }} />
+                </Grid>
             </div>
         )
     }

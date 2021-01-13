@@ -23,8 +23,8 @@ export default class Search extends Component<SearchProps, SearchState> {
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
                         <Paper elevation={3}>
-                            <form noValidate autoComplete="off">
-                                <TextField style={{width: "100%"}} id="outlined-basic" label="Search" variant="outlined" onChange={(e) => { this.setState({ searchQuery: e.target.value }) }} />
+                            <form noValidate autoComplete="off" onSubmit={(e) => {e.preventDefault()}}>
+                                <TextField style={{width: "100%"}} id="outlined-basic" label="Search" variant="outlined" onChange={(e) => { e.preventDefault(); this.setState({ searchQuery: e.target.value }) }} />
                             </form>
                         </Paper>
                     </Grid>

@@ -21,6 +21,7 @@ type RootContextState = {
   authBody: string,
   token: string
   serverUrl: string
+  isAdmin: boolean
 }
 
 export default class RootContextClass extends Component<RootContextProps, RootContextState> {
@@ -32,6 +33,7 @@ export default class RootContextClass extends Component<RootContextProps, RootCo
       authenticated: '',
       authBody: '',
       token: '',
+      isAdmin: false,
       serverUrl: (window.location.hostname === ('localhost' || '127.0.0.1')) ? 'http://localhost:4002' : 'https://jam-funkofolder-server.herokuapp.com'
     }
 
@@ -48,7 +50,8 @@ export default class RootContextClass extends Component<RootContextProps, RootCo
         this.setState({
           authenticated: (res.status === 200) ? localStorage.getItem('authenticated') || '' : '',
           authBody: (res.status === 200) ? localStorage.getItem('authBody') || '' : '',
-          token: (res.status === 200) ? localStorage.getItem('token') || '' : ''
+          token: (res.status === 200) ? localStorage.getItem('token') || '' : '',
+          isAdmin: res.data.isAdmin
         })
       })
   }
@@ -67,7 +70,8 @@ export default class RootContextClass extends Component<RootContextProps, RootCo
       setAuthBody: (v: string) => this.setState({authBody: v}, () => console.log('called')),
       token: this.state.token,
       setToken: (v: string) => this.setState({token: v}),
-      serverUrl: this.state.serverUrl
+      serverUrl: this.state.serverUrl,
+      isAdmin: this.state.isAdmin
     };
   }
 

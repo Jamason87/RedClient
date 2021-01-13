@@ -3,7 +3,8 @@ import React, { Component } from "react";
 import MenuIcon from '@material-ui/icons/Menu';
 import { AccountCircle } from "@material-ui/icons";
 import { RootContext } from "./contexts/RootContext";
-import { Link as RouterLink } from "react-router-dom";
+import { Link, Link as RouterLink } from "react-router-dom";
+import Admin from "./admin/Admin";
 
 type NavbarProps = {
 
@@ -79,19 +80,19 @@ export default class Navbar extends Component<NavbarProps, NavbarState> {
             <AppBar position="static" className={this.state.classes.root}>
                 <Toolbar>
                     <IconButton edge="start" className={this.state.classes.menuButton} color="inherit" aria-label="menu">
-                        <MenuIcon />
+                        <Link to="/"><img style={{width: '64px'}} src="/logo.png" /></Link>
                     </IconButton>
-                    <Typography variant="h6" className={this.state.classes.title}>
-                        Funko Folder
-                    </Typography>
+
+                    <div style={{flex: 1}}></div>
     
                     <Button component={RouterLink} to="/" color="inherit">Home</Button>
     
                     {this.context.authenticated === 'true' && (
-                        <React.Fragment>
                             <Button component={RouterLink} to="/wishlist" color="inherit">Wishlist</Button>
+                    )}
+                    
+                    {this.context.authenticated === 'true' && (
                             <Button component={RouterLink} to="/collections" color="inherit">Collections</Button>
-                        </React.Fragment>
                     )}
     
                     {this.context.authenticated !== 'true' && (
@@ -124,8 +125,7 @@ export default class Navbar extends Component<NavbarProps, NavbarState> {
                                 open={Boolean(this.state.anchorEl)}
                                 onClose={this.handleClose}
                             >
-                                <MenuItem onClick={this.handleClose}>Profile</MenuItem>
-                                <MenuItem onClick={this.handleClose}>My account</MenuItem>
+                                {this.context.isAdmin ? <Link style={{ textDecoration: 'none', color: 'black'}}to="/admin"><MenuItem>Admin</MenuItem></Link> : ''}
                                 <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
                             </Menu>
                         </div>
