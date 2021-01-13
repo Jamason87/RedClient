@@ -53,6 +53,7 @@ export default class Navbar extends Component<NavbarProps, NavbarState> {
         this.context.setAuthenticated('false');
         this.context.setAuthBody('');
         this.context.setToken('');
+        this.context.setIsAdmin('false')
 
         this.setState({
             anchorEl: null

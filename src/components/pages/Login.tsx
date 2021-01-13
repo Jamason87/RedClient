@@ -58,6 +58,7 @@ export default class Login extends Component<LoginProps, LoginState> {
                     //localStorage.setItem('token', res.data.token);
                     this.context.setAuthenticated('true');
                     this.context.setToken(res.data.token);
+                    this.context.setIsAdmin(res.data.isAdmin);
                 } else {
                     errors.push('Your username/password does not match our records.')
                 }

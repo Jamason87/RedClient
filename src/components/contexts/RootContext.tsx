@@ -71,7 +71,8 @@ export default class RootContextClass extends Component<RootContextProps, RootCo
       token: this.state.token,
       setToken: (v: string) => this.setState({token: v}),
       serverUrl: this.state.serverUrl,
-      isAdmin: this.state.isAdmin
+      isAdmin: this.state.isAdmin,
+      setIsAdmin: (v: string) => this.setState({isAdmin: Boolean(v)})
     };
   }
 
