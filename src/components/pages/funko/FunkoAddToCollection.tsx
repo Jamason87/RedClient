@@ -60,7 +60,7 @@ export default class FunkoAddToCollection extends Component<FunkoAddToCollection
                         selectedCollection: this.state.collections[0].id
                     })
                 })
-            })//TODO: FINISH THE ADD TO A COLLECTION FUNKO
+            })
     }
 
     handleChange(e: React.ChangeEvent<{value: number | unknown}>) {
@@ -94,14 +94,14 @@ export default class FunkoAddToCollection extends Component<FunkoAddToCollection
     render() {
         return (
             <Grid component={Paper} style={this.state.styles.root} justify="center" container>
-                { this.state.collections.length !== 0 && <Grid item xs={12}>
+                { this.state.collections.length !== 0 && <Grid item xs={12} style={{padding: '30px'}}>
                     <form>
                         <FormControl>
                             <InputLabel id="demo-simple-select-label">Collections</InputLabel>
                             <Select
                                 labelId="demo-simple-select-label"
                                 id="demo-simple-select"
-                                value={this.state.collections[0].id}
+                                value={this.state.selectedCollection}
                                 onChange={this.handleChange}
                             >
                                 {this.state.collections.map((c) => {

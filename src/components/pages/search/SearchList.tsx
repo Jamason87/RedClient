@@ -41,7 +41,7 @@ export default class SearchList extends Component<SearchListProps, SearchListSta
             maxResults: this.state.maxResults
         }
 
-        Axios.post(`${this.context.serverUrl}/funko/search`, axiosData)//TODO LATER
+        Axios.post(`${this.context.serverUrl}/funko/search`, axiosData)
             .then(res => {
                 console.log(res.data.data.rows.map((o: any) => o.title))
 

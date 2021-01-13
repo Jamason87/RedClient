@@ -70,8 +70,10 @@ export default class CollectionsAdd extends Component<CollectionsAddProps, Colle
                     "Authorization": this.context.token
                 }
             })
+                .then(res => {
+                    this.props.closeModal()
+                })
 
-            this.props.closeModal()
         } else {
             this.setState({
                 errors: errors
@@ -85,10 +87,10 @@ export default class CollectionsAdd extends Component<CollectionsAddProps, Colle
                 padding: 10
             }}>
                 {this.state.errors.length !== 0 && <div>
-                        {this.state.errors.map(e => {
-                            return <p style={this.state.styles.errorMsg}>{e}</p>
-                        })}
-                    </div>}
+                    {this.state.errors.map(e => {
+                        return <p style={this.state.styles.errorMsg}>{e}</p>
+                    })}
+                </div>}
                 <form noValidate autoComplete="off" onSubmit={this.onSubmit}>
                     <TextField type="text" style={this.state.styles.textfield} onChange={(e) => this.onInputChange(e, "name")} label="Name" />< br />
                     <TextField type="text" style={this.state.styles.textfield} onChange={(e) => this.onInputChange(e, "desc")} label="Description" /><br /><br />
